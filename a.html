@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Crime Rate prediction</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+
+      html{
+        scrollbar-width: none;
+      }
+      body {
+        background: #d8d3d3;
+      }
+
+      #nava {
+        height: 10vh;
+        background: rgb(107, 205, 107);
+        padding: 30px;
+      }
+
+      .nav-link {
+        font-size: 2rem;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .navbar-brand {
+        font-size: 2.5rem;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .nav-link:hover {
+        text-decoration: underline;
+      }
+
+      .pre_heading {
+        padding-top: 3vh;
+        font-size: 6rem;
+        color: rgb(63, 209, 53);
+      }
+
+      .prediction {
+        margin-top: 7vh;
+        display: flex;
+        padding-bottom: 100px;
+        border-bottom: solid 10px green;
+        border-radius: 2%;
+      }
+      .form_pre {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        width: 55%;
+        height: 55%;
+        margin-left: 5%;
+        margin-right: 5%;
+        margin-top: 20px;
+        border-radius: 5%;
+      }
+
+      .result {
+        display: flex;
+        flex-direction: column;
+        background: #f3eeee;
+        border: solid 5px black;
+        padding: 20px;
+        width: 50%;
+        height: 50vh;
+        margin-left: 20px;
+        margin-top: 20px;
+        border-radius: 5%;
+        margin-left: 5%;
+        margin-right: 3%;
+      }
+
+      .bts {
+        width: 15vh;
+        height: 5vh;
+        font-size: 1.3rem;
+        margin-top: 5vh;
+        margin-left: 40%;
+      }
+
+      .h_and_drop {
+        margin-top: 4vh;
+      }
+
+      .h_and_drop h1 {
+        font-size: 50px;
+        margin-bottom: 15px;
+      }
+
+      .sec {
+        font-size: 20px;
+      }
+      .ele {
+        font-size: 50px;
+      }
+      .two_ele1 {
+        margin-top: 50px;
+      }
+
+      .two_ele2 {
+        margin-top: 30px;
+        margin-right: 50px;
+      }
+
+      .result_graph {
+        background: #f3eeee;
+        border: solid 5px black;
+        padding: 20px;
+        width: 1000px;
+        height: 500px;
+        margin-left: 20px;
+        margin-top: 5%;
+        border-radius: 5%;
+        margin-left: 5%;
+        margin-right: 5%;
+      }
+
+      .mapf {
+        display: flex;
+        margin-left: 4%;
+      }
+
+      .bts_map {
+        width: 15vh;
+        height: 5vh;
+        font-size: 1.3rem;
+        margin-left: 4%;
+        margin-right: 4%;
+      }
+
+      .crime {
+        margin-left: 3%;
+        margin-right: 3%;
+        width: 45%;
+      }
+
+      .chloro {
+        margin-bottom: 5%;
+      }
+
+      .chloro_heading {
+        width: auto;
+        text-wrap: nowrap;
+        font-size: 2.6rem;
+      }
+      .chloro_map {
+        background: #f3eeee;
+        border: solid 5px black;
+        padding: 20px;
+        width: 80%;
+        height: 80vh;
+        margin-left: 20px;
+        margin-top: 2%;
+        border-radius: 5%;
+        margin-left: 5%;
+        margin-right: 5%;
+        margin-bottom: 5%;
+      }
+
+      footer {
+        border-top: solid 5px black;
+        border-radius: 2%;
+        width: 100%;
+        height: 75vh;
+        background: #1f1b1bd1;
+        display: flex;
+      }
+
+      .comment_f {
+        display: flex;
+        flex-direction: column;
+        border-right: 4px solid white;
+        width: 50%;
+        margin-left: 4%;
+        margin-top: 4%;
+        padding: 20px;
+        padding-right: 60px;
+        height: 65vh;
+        font-size: 35px;
+        justify-items: space-between;
+        color: whitesmoke;
+      }
+
+      .comment_f input {
+        margin-bottom: 4%;
+        margin-right: 5%;
+        border-radius: 5%;
+      }
+      .comment_f textarea {
+        margin-right: 5%;
+        border-radius: 5%;
+        height: 20vh;
+      }
+
+      .comment_f button {
+        margin-top: 4%;
+        margin-right: 5%;
+        font-size: 20px;
+      }
+
+      .comment_f h2 {
+        font-size: 3rem;
+      }
+
+      .etc {
+        display: flex;
+        flex-direction: column;
+        width: 30vw;
+        margin-left: 5%;
+        margin-top: 4%;
+        padding: 50px;
+        font-size: 35px;
+        color: whitesmoke;
+      }
+
+      .etc h2 {
+        color: whitesmoke;
+      }
+
+      .etc .logo {
+        margin-top: -5%;
+      }
+
+      .about {
+        margin-top: 5vh;
+        padding-bottom: 100px;
+        border-bottom: solid 10px green;
+        border-radius: 2%;
+      }
+
+      .btns {
+        margin-left: 10%;
+        margin-top: 5vh;
+      }
+
+      .btsn {
+        font-size: 25px;
+        padding: 10px;
+        margin-right: 25px;
+      }
+
+      .infor {
+        background: #f3eeee;
+        border: solid 5px black;
+        padding: 20px;
+        width: 80%;
+        height: 70vh;
+        margin-left: 20px;
+        margin-top: 20px;
+        border-radius: 5%;
+        margin-left: 10%;
+        margin-right: 5%;
+        overflow: scroll;
+        scrollbar-width: none;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg fixed-top" id="nava">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">welcome!!</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link px-3" aria-current="page" href="#">prediction</a>
+            <a class="nav-link px-3" href="#chloro">map</a>
+            <a class="nav-link px-3" href="#abou">about</a>
+            <a class="nav-link px-3" href="#visual">visuals</a>
+            <a class="nav-link px-3" href="#foot">comments</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+
+    <h1 align="center" class="pre_heading">
+      predict the crime and always be safe
+    </h1>
+    <br />
+    <br />
+
+    <div class="prediction">
+      <div class="form_pre">
+        <div class="h_and_drop">
+          <h1>&nbsp; select the state</h1>
+          <select
+            class="form-select form-select-lg mb-3"
+            aria-label="Large select example"
+            id="pre_state"
+          >
+            <option value="ANDHRA PRADESH">ANDHRA PRADESH</option>
+            <option value="ARUNACHAL PRADESH">ARUNACHAL PRADESH</option>
+            <option value="ASSAM">ASSAM</option>
+            <option value="BIHAR">BIHAR</option>
+            <option value="CHHATTISGARH">CHHATTISGARH</option>
+            <option value="GOA">GOA</option>
+            <option value="GUJARAT">GUJARAT</option>
+            <option value="HARYANA">HARYANA</option>
+            <option value="HIMACHAL PRADESH">HIMACHAL PRADESH</option>
+            <option value="JAMMU & KASHMIR">JAMMU & KASHMIR</option>
+            <option value="JHARKHAND">JHARKHAND</option>
+            <option value="KARNATAKA">KARNATAKA</option>
+            <option value="KERALA">KERALA</option>
+            <option value="MADHYA PRADESH">MADHYA PRADESH</option>
+            <option value="MAHARASHTRA">MAHARASHTRA</option>
+            <option value="MANIPUR">MANIPUR</option>
+            <option value="MEGHALAYA">MEGHALAYA</option>
+            <option value="MIZORAM">MIZORAM</option>
+            <option value="NAGALAND">NAGALAND</option>
+            <option value="ODISHA">ODISHA</option>
+            <option value="PUNJAB">PUNJAB</option>
+            <option value="RAJASTHAN">RAJASTHAN</option>
+            <option value="SIKKIM">SIKKIM</option>
+            <option value="TAMIL NADU">TAMIL NADU</option>
+            <option value="TRIPURA">TRIPURA</option>
+            <option value="UTTAR PRADESH">UTTAR PRADESH</option>
+            <option value="UTTARAKHAND">UTTARAKHAND</option>
+            <option value="WEST BENGAL">WEST BENGAL</option>
+            <option value="ANDAMAN AND NICOBAR ISLANDS">
+              ANDAMAN AND NICOBAR ISLANDS
+            </option>
+            <option value="CHANDIGARH">CHANDIGARH</option>
+            <option value="DELHI">DELHI</option>
+            <option value="LAKSHADWEEP">LAKSHADWEEP</option>
+            <option value="PUDUCHERRY">PUDUCHERRY</option>
+          </select>
+        </div>
+
+        <div class="h_and_drop">
+          <h1>&nbsp; select the crime</h1>
+          <select
+            class="form-select form-select-lg mb-3"
+            aria-label="Large select example"
+            id="pre_cri"
+          >
+            <option value="Rape">Rape</option>
+            <option value="Kidnapping and Abduction">
+              Kidnapping and Abduction
+            </option>
+            <option value="Dowry Deaths">Dowry Deaths</option>
+            <option value="Assault on women with intent to outrage her modesty">
+              Assault on women with intent to outrage her modesty
+            </option>
+            <option value="Insult to modesty of Women">
+              Insult to modesty of Women
+            </option>
+            <option value="Cruelty by Husband or his Relatives">
+              Cruelty by Husband or his Relatives
+            </option>
+            <option value="Importation of Girls">Importation of Girls</option>
+          </select>
+        </div>
+
+        <button type="button" class="btn btn-success bts" id="prediction">
+          predict
+        </button>
+      </div>
+      <div class="result">
+        <div class="two_ele1">
+          <h1 class="ele">prediction Numbers are:</h1>
+          <h2 class="ele" id="pre_numbers">nan</h2>
+        </div>
+        <div class="two_ele2">
+          <h1 class="ele">region colur is</h1>
+          <h2 class="ele" id="color">nan</h2>
+        </div>
+      </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+
+    <br id="abou" />
+    <br />
+    <div class="about" id="abou">
+      <h1 align="center" class="pre_heading">
+        know about the crime rate predicion
+      </h1>
+
+      <div class="btns">
+        <button type="button" class="btsn btn btn-success" id="safe">
+          for safety
+        </button>
+        <button type="button" class="btsn btn btn-danger" id="aware">
+          for awareness
+        </button>
+        <button type="button" class="btsn btn btn-warning" id="policy">
+          for policy making
+        </button>
+        <button type="button" class="btsn btn btn-info" id="data">
+          data driven making
+        </button>
+      </div>
+
+      <div class="infor" id="inf"></div>
+    </div>
+
+    <br id="visual" />
+
+    <br />
+
+    <h1 id="visual" align="center" class="pre_heading">
+      Visual the data through the graph
+    </h1>
+
+    <div class="prediction">
+      <div class="form_pre">
+        <div class="h_and_drop">
+          <h1>&nbsp; select the state</h1>
+          <select
+            class="form-select form-select-lg mb-3"
+            aria-label="Large select example"
+            id="gra_stat"
+          >
+            <option value="ANDHRA PRADESH">ANDHRA PRADESH</option>
+            <option value="ARUNACHAL PRADESH">ARUNACHAL PRADESH</option>
+            <option value="ASSAM">ASSAM</option>
+            <option value="BIHAR">BIHAR</option>
+            <option value="CHHATTISGARH">CHHATTISGARH</option>
+            <option value="GOA">GOA</option>
+            <option value="GUJARAT">GUJARAT</option>
+            <option value="HARYANA">HARYANA</option>
+            <option value="HIMACHAL PRADESH">HIMACHAL PRADESH</option>
+            <option value="JAMMU & KASHMIR">JAMMU & KASHMIR</option>
+            <option value="JHARKHAND">JHARKHAND</option>
+            <option value="KARNATAKA">KARNATAKA</option>
+            <option value="KERALA">KERALA</option>
+            <option value="MADHYA PRADESH">MADHYA PRADESH</option>
+            <option value="MAHARASHTRA">MAHARASHTRA</option>
+            <option value="MANIPUR">MANIPUR</option>
+            <option value="MEGHALAYA">MEGHALAYA</option>
+            <option value="MIZORAM">MIZORAM</option>
+            <option value="NAGALAND">NAGALAND</option>
+            <option value="ODISHA">ODISHA</option>
+            <option value="PUNJAB">PUNJAB</option>
+            <option value="RAJASTHAN">RAJASTHAN</option>
+            <option value="SIKKIM">SIKKIM</option>
+            <option value="TAMIL NADU">TAMIL NADU</option>
+            <option value="TRIPURA">TRIPURA</option>
+            <option value="UTTAR PRADESH">UTTAR PRADESH</option>
+            <option value="UTTARAKHAND">UTTARAKHAND</option>
+            <option value="WEST BENGAL">WEST BENGAL</option>
+            <option value="ANDAMAN AND NICOBAR ISLANDS">
+              ANDAMAN AND NICOBAR ISLANDS
+            </option>
+            <option value="CHANDIGARH">CHANDIGARH</option>
+            <option value="DELHI">DELHI</option>
+            <option value="LAKSHADWEEP">LAKSHADWEEP</option>
+            <option value="PUDUCHERRY">PUDUCHERRY</option>
+          </select>
+        </div>
+
+        <div class="h_and_drop">
+          <h1>&nbsp; select the crime</h1>
+          <select
+            class="form-select form-select-lg mb-3"
+            aria-label="Large select example"
+            id="gra_cri"
+          >
+            <option value="Rape">Rape</option>
+            <option value="Kidnapping and Abduction">
+              Kidnapping and Abduction
+            </option>
+            <option value="Dowry Deaths">Dowry Deaths</option>
+            <option value="Assault on women with intent to outrage her modesty">
+              Assault on women with intent to outrage her modesty
+            </option>
+            <option value="Insult to modesty of Women">
+              Insult to modesty of Women
+            </option>
+            <option value="Cruelty by Husband or his Relatives">
+              Cruelty by Husband or his Relatives
+            </option>
+            <option value="Importation of Girls">Importation of Girls</option>
+          </select>
+        </div>
+
+        <div class="h_and_drop">
+          <h1>&nbsp; select the plot</h1>
+          <select
+            class="form-select form-select-lg mb-3"
+            aria-label="Large select example"
+            id="gra_plt"
+          >
+            <option value="barplot">barplot</option>
+            <option value="lineplot">lineplot</option>
+            <option value="scatterplot">scatterplot</option>
+          </select>
+        </div>
+
+        <button id="graph" type="button" class="btn btn-success bts">
+          visual
+        </button>
+      </div>
+      <div class="result_graph" id="my_dataviz"></div>
+    </div>
+
+    <h1 align="center" class="pre_heading chloro" id="chloro"></h1>
+    <h1 align="center" class="pre_heading chloro" id="chloro">
+      chloropeth maps
+    </h1>
+
+    <div class="map">
+      <div class="mapf">
+        <h1 class="chloro_heading">&nbsp; select the crime</h1>
+
+        <div class="crime">
+          <select
+            class="form-select form-select-lg mb-3"
+            aria-label="Large select example"
+            id="chloro_cime"
+          >
+            <option value="Rape">Rape</option>
+            <option value="Kidnapping and Abduction">
+              Kidnapping and Abduction
+            </option>
+            <option value="Dowry Deaths">Dowry Deaths</option>
+            <option value="Assault on women with intent to outrage her modesty">
+              Assault on women with intent to outrage her modesty
+            </option>
+            <option value="Insult to modesty of Women">
+              Insult to modesty of Women
+            </option>
+            <option value="Cruelty by Husband or his Relatives">
+              Cruelty by Husband or his Relatives
+            </option>
+            <option value="Importation of Girls">Importation of Girls</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-success bts_map" id="btn_map">
+          map
+        </button>
+      </div>
+
+      <div class="chloro_map" id="map"></div>
+    </div>
+
+    <footer id="foot">
+      <div class="comment_f">
+        <h2>comment</h2>
+
+        <label for="name"> name </label>
+        <input type="text" placeholder="json paker" id="name" />
+
+        <label for="email" id="comm_email"> email</label>
+        <input type="text" placeholder="name@email.com" id="email" />
+
+        <label for="comments" id="comm_text"> comments</label>
+        <textarea
+          rows="5"
+          cols="16"
+          placeholder="write your opnion about the app"
+          id="comm"
+        ></textarea>
+
+        <button class="btn btn-success bts_comm" id="btn_comm">submit</button>
+      </div>
+      <div class="etc">
+        <h2>Join us at the :</h2>
+
+        <div class="logo">
+          <br />
+          <a href=""
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              fill="currentColor"
+              class="bi bi-instagram"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"
+              /></svg
+          ></a>
+          <span>instagram</span>
+          <br />
+
+          <a href=""
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              fill="currentColor"
+              class="bi bi-twitter"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"
+              /></svg
+          ></a>
+          <span>twitter</span>
+          <br />
+
+          <a href="" id="facebook">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              fill="currentColor"
+              class="bi bi-facebook"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"
+              /></svg
+          ></a>
+          <span>facebook</span>
+          <br />
+
+          <a href="">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              fill="currentColor"
+              class="bi bi-youtube"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M15.61 3.033a2 2 0 0 0-1.407-1.407C13.009 1 8 1 8 1s-5.009 0-6.203.626A2 2 0 0 0 .39 3.033C0 4.241 0 8 0 8s0 3.759.39 4.967a2 2 0 0 0 1.407 1.407C2.991 15 8 15 8 15s5.009 0 6.203-.626a2 2 0 0 0 1.407-1.407C16 11.759 16 8 16 8s0-3.759-.39-4.967zM6.5 10.25V5.75L10.75 8l-4.25 2.25z"
+              />
+            </svg>
+          </a>
+          <span> youtube</span>
+        </div>
+
+        <br />
+        <h3>@copyright-2024</h3>
+      </div>
+    </footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/6.5.0/turf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.1.0/chroma.min.js"></script>
+    <script src="function.js"></script>
+    <script src="user_intrection.js"></script>
+  </body>
+</html>
