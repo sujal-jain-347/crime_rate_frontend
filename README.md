@@ -1,7 +1,18 @@
-the frontend of the crime rate prediction ,
+The frontend of the crime rate prediction ,
 which is used for the client side scripting web app,
 it can be employ with the its backend in the repository 
 i.e  crime rate prediction project
+
+Here we have use the :
+html
+Css,
+JavaScript,
+Browser API,
+d3,
+leafleat,
+bootStrap
+
+
 
 The website image is given as :
 
