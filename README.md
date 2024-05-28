@@ -12,6 +12,7 @@ d3,
 leafleat,
 bootStrap
 
+for runnig the website just download the zip file, and run it (make sure that internet is on , and its server is running)  
 
 
 The website image is given as :
